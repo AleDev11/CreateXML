@@ -15,54 +15,132 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class ManagerXml {
-    public void WriterXML(String NameFile, String Addid, String Addfirstname, int AddNota, int Addlastname) {
+
+    private int getTotalId() {
+        int totalIId = 0;
+
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(Main.NameFile);
+            totalIId = doc.getElementsByTagName("Estudiante").getLength();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            Document doc =docBuilder.newDocument();
-            Element rootElemant = doc.createElement("Esccuela");
-            doc.appendChild(rootElemant);
+        return totalIId;
+    }
 
-            Element Estudiantes = doc.createElement("Estudiantes");
-            rootElemant.appendChild(Estudiantes);
+    public void createXml() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("Escuela");
+            doc.appendChild(rootElement);
+            Element estudiantes = doc.createElement("Estudiantes");
+            rootElement.appendChild(estudiantes);
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new FileOutputStream(Main.NameFile));
+            transformer.transform(source, result);
+        } catch (ParserConfigurationException | TransformerException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-            Element Estudiante = doc.createElement("Estudiante");
-            Estudiantes.appendChild(Estudiante);
+    public void addStudent(String name, String lastName, int note) {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(Main.NameFile);
+
+            Element rootElement = doc.getDocumentElement();
+
+            Element estudiantes = (Element) rootElement.getElementsByTagName("Estudiantes").item(0);
+
+            Element estudiante = doc.createElement("Estudiante");
+            estudiantes.appendChild(estudiante);
 
             Attr attr = doc.createAttribute("id");
-            attr.setValue(String.valueOf(Addid));
-            Estudiante.setAttributeNode(attr);
+            attr.setValue(String.valueOf(getTotalId() + 1));
+            estudiante.setAttributeNode(attr);
 
-            Element firstname = doc.createElement("firstname");
-            firstname.appendChild(doc.createTextNode(Addfirstname));
-            Estudiante.appendChild(firstname);
+            Element nombre = doc.createElement("Nombre");
+            nombre.appendChild(doc.createTextNode(name));
+            estudiante.appendChild(nombre);
 
-            Element lastname = doc.createElement("lastname");
-            lastname.appendChild(doc.createTextNode(String.valueOf(Addlastname)));
-            Estudiante.appendChild(lastname);
+            Element apellido = doc.createElement("Apellido");
+            apellido.appendChild(doc.createTextNode(lastName));
+            estudiante.appendChild(apellido);
 
-            Element nota = doc.createElement("nota");
-            nota.appendChild(doc.createTextNode(String.valueOf(AddNota)));
-            Estudiante.appendChild(nota);
+            Element nota = doc.createElement("Nota");
+            nota.appendChild(doc.createTextNode(String.valueOf(note)));
+            estudiante.appendChild(nota);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new FileOutputStream(Main.NameFile));
 
-            StreamResult result = new StreamResult(new FileOutputStream(NameFile));
             transformer.transform(source, result);
 
-            System.out.println("Alumno guardado con exito!");
-
-        } catch (ParserConfigurationException e) {
+            System.out.println("[SYSTEM] File saved!");
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
+        }
+    }
+
+    public void showAllStudents() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(Main.NameFile);
+
+            Element rootElement = doc.getDocumentElement();
+
+            Element estudiantes = (Element) rootElement.getElementsByTagName("Estudiantes").item(0);
+
+            for (int i = 0; i < estudiantes.getElementsByTagName("Estudiante").getLength(); i++) {
+                Element estudiante = (Element) estudiantes.getElementsByTagName("Estudiante").item(i);
+
+                System.out.println("==================================");
+                System.out.println("ID: " + estudiante.getAttribute("id"));
+                System.out.println("Nombre: " + estudiante.getElementsByTagName("Nombre").item(0).getTextContent());
+                System.out.println("Apellido: " + estudiante.getElementsByTagName("Apellido").item(0).getTextContent());
+                System.out.println("Nota: " + estudiante.getElementsByTagName("Nota").item(0).getTextContent());
+                System.out.println("==================================");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchStudentWhereName(String name) {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(Main.NameFile);
+
+            Element rootElement = doc.getDocumentElement();
+
+            Element estudiantes = (Element) rootElement.getElementsByTagName("Estudiantes").item(0);
+
+            for (int i = 0; i < estudiantes.getElementsByTagName("Estudiante").getLength(); i++) {
+                Element estudiante = (Element) estudiantes.getElementsByTagName("Estudiante").item(i);
+
+                if (estudiante.getElementsByTagName("Nombre").item(0).getTextContent().equals(name)) {
+                    System.out.println("==================================");
+                    System.out.println("ID: " + estudiante.getAttribute("id"));
+                    System.out.println("Nombre: " + estudiante.getElementsByTagName("Nombre").item(0).getTextContent());
+                    System.out.println("Apellido: " + estudiante.getElementsByTagName("Apellido").item(0).getTextContent());
+                    System.out.println("Nota: " + estudiante.getElementsByTagName("Nota").item(0).getTextContent());
+                    System.out.println("==================================");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

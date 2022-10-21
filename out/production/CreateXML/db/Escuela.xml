@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Escuela>
+    <Estudiantes>
+        <Estudiante id="1">
+            <Nombre>hsad</Nombre>
+            <Apellido>wedas</Apellido>
+            <Nota>12</Nota>
+        </Estudiante>
+        <Estudiante id="2">
+            <Nombre>aklfikla</Nombre>
+            <Apellido>sdafs</Apellido>
+            <Nota>23</Nota>
+        </Estudiante>
+    </Estudiantes>
+</Escuela>

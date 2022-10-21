@@ -14,6 +14,7 @@ public class FileManager {
         if (!file.exists()) {
             try {
                 file.createNewFile();
+                Main.managerXml.createXml();
             } catch (IOException e) {
                 e.printStackTrace();
             }
