@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Escuela>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Escuela>
     <Estudiantes>
         <Estudiante id="1">
-            <Nombre>Pedro</Nombre>
-            <Apellido>Perez</Apellido>
-            <Nota>10</Nota>
+            <Nombre>Carlo</Nombre>
+            <Apellido>Comemierda</Apellido>
+            <Nota>11</Nota>
         </Estudiante>
         <Estudiante id="2">
-            <Nombre>Antonio</Nombre>
-            <Apellido>Fernandez</Apellido>
-            <Nota>6</Nota>
+            <Nombre>Pimenton</Nombre>
+            <Apellido>Pesado</Apellido>
+            <Nota>0</Nota>
         </Estudiante>
     </Estudiantes>
 </Escuela>
